@@ -35,8 +35,8 @@ source "zynthian_envars_extended.sh"
 [ -n "$ZYNTHIAN_INCLUDE_RPI_UPDATE" ] || ZYNTHIAN_INCLUDE_RPI_UPDATE=no
 [ -n "$ZYNTHIAN_INCLUDE_PIP" ] || ZYNTHIAN_INCLUDE_PIP=yes
 [ -n "$ZYNTHIAN_CHANGE_HOSTNAME" ] || ZYNTHIAN_CHANGE_HOSTNAME=yes
-
-[ -n "$ZYNTHIAN_SYS_REPO" ] || ZYNTHIAN_SYS_REPO="https://github.com/zynthian/zynthian-sys.git"
+#[ -n "$ZYNTHIAN_SYS_REPO" ] || ZYNTHIAN_SYS_REPO="https://github.com/zynthian/zynthian-sys.git"
+[ -n "$ZYNTHIAN_SYS_REPO" ] || ZYNTHIAN_SYS_REPO="https://github.com/bikashsri/zynthian-sys.git"
 [ -n "$ZYNTHIAN_UI_REPO" ] || ZYNTHIAN_UI_REPO="https://github.com/zynthian/zynthian-ui.git"
 [ -n "$ZYNTHIAN_ZYNCODER_REPO" ] || ZYNTHIAN_ZYNCODER_REPO="https://github.com/zynthian/zyncoder.git"
 [ -n "$ZYNTHIAN_WEBCONF_REPO" ] || ZYNTHIAN_WEBCONF_REPO="https://github.com/zynthian/zynthian-webconf.git"
@@ -46,10 +46,6 @@ source "zynthian_envars_extended.sh"
 [ -n "$ZYNTHIAN_ZYNCODER_BRANCH" ] || ZYNTHIAN_ZYNCODER_BRANCH="oram"
 [ -n "$ZYNTHIAN_WEBCONF_BRANCH" ] || ZYNTHIAN_WEBCONF_BRANCH="oram"
 [ -n "$ZYNTHIAN_DATA_BRANCH" ] || ZYNTHIAN_DATA_BRANCH="oram"
-
-
-#ZYNTHIAN_LIB_INSTALL="yes"
-#if [ "$ZYNTHIAN_LIB_INSTALL" == "yes" ]; then
 
 #------------------------------------------------
 # Update System & Firmware
@@ -63,8 +59,8 @@ apt-get -y update --allow-releaseinfo-change
 apt-get -y dist-upgrade
 
 # Install required dependencies if needed
-### REMOVED rpi-update
-apt-get -y install apt-utils apt-transport-https sudo software-properties-common parted dirmngr rpi-eeprom gpgv
+### REMOVED rpi-update rpi-eeprom
+apt-get -y install apt-utils apt-transport-https sudo software-properties-common parted dirmngr gpgv
 #htpdate
 
 # Adjust System Date/Time
@@ -107,10 +103,10 @@ wget -O - https://deb.zynthian.org/deb-zynthian-org.gpg > /etc/apt/trusted.gpg.d
 echo "deb https://deb.zynthian.org/zynthian-stable buster main" > /etc/apt/sources.list.d/zynthian.list
 
 # Sfizz
-### UPDATE to RASPBIAN_11
-sfizz_url_base="http://download.opensuse.org/repositories/home:/sfztools:/sfizz:/develop/Raspbian_11"
-echo "deb $sfizz_url_base/ /" > /etc/apt/sources.list.d/sfizz-dev.list
-curl -fsSL $sfizz_url_base/Release.key | apt-key add -
+### UPDATED to RASPBIAN_11
+#sfizz_url_base="http://download.opensuse.org/repositories/home:/sfztools:/sfizz:/develop/Raspbian_11"
+#echo "deb $sfizz_url_base/ /" > /etc/apt/sources.list.d/sfizz-dev.list
+#curl -fsSL $sfizz_url_base/Release.key | apt-key add -
 
 apt-get -y update
 apt-get -y dist-upgrade
@@ -122,35 +118,27 @@ apt-get -y autoremove
 
 # System
 ### REMOVED exfat-util
-apt-get -y remove --purge isc-dhcp-client triggerhappy logrotate dphys-swapfile
-apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil
 ### REPLACED vnc4server with tigervnc-standalone-server
-apt-get -y install xinit xserver-xorg-video-fbdev x11-xserver-utils xinput libgl1-mesa-dri tigervnc-standalone-server
-### REMOVED xfwm4-themes
-apt-get -y install xfwm4 xfce4-panel xdotool cpufrequtils
+### REPLACED xfwm4-themes with shiki-colors-xfwm-theme
+apt-get -y remove --purge isc-dhcp-client triggerhappy logrotate dphys-swapfile
+apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil exfatprogs \
+xinit xserver-xorg-video-fbdev x11-xserver-utils xinput libgl1-mesa-dri tigervnc-standalone-server \
+xfwm4 xfce4-panel xdotool cpufrequtils wpasupplicant wireless-tools iw dnsmasq shiki-colors-xfwm-theme
 
-apt-get -y install wpasupplicant wireless-tools iw hostapd dnsmasq
 apt-get -y install firmware-brcm80211 firmware-atheros firmware-realtek atmel-firmware firmware-misc-nonfree
 #firmware-ralink
-
-apt-get -y install shiki-colors-xfwm-theme
 
 # Alternate XServer with some 2D acceleration
 #apt-get -y install xserver-xorg-video-fbturbo
 #ln -s /usr/lib/arm-linux-gnueabihf/xorg/modules/drivers/fbturbo_drv.so /usr/lib/xorg/modules/drivers
+echo "COMPLETED---> System Packages"
 
 # CLI Tools
-echo "Installing CLI Tools..."
-
 ### REMOVED  raspi-config mplayer ffmpeg
-CLI_TOOLS="psmisc tree joe nano vim p7zip-full i2c-tools ddcutil evtest libts-bin \
-	fbi scrot mpg123 xloadimage imagemagick fbcat qjackctl mediainfo"
+apt-get -y install psmisc tree joe nano vim p7zip-full i2c-tools ddcutil evtest libts-bin \
+fbi scrot mpg123 xloadimage imagemagick fbcat qjackctl mediainfo xterm gpiod xfce4-terminal
 
-for tool in $CLI_TOOLS
-do
-    echo "Installing $tool ..."
-    apt-get -y install $tool
-done
+echo "COMPLETED---> CLI Tools"
 
 #apt-get install python-smbus (i2c with python)
 
@@ -167,11 +155,11 @@ done
 #Tools
 ### ADDED
 # QT packages
-apt-get -y --no-install-recommends install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qtdeclarative5-dev
+apt-get -y --no-install-recommends install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qtdeclarative5-dev libqt5svg5-dev
 
 ### REMOVED qt5-default rubberband-cli
 apt-get -y --no-install-recommends install build-essential git swig subversion pkg-config autoconf automake premake \
-gettext intltool libtool libtool-bin cmake cmake-curses-gui flex bison ngrep qt5-qmake gobjc++ \
+gettext intltool libtool libtool-bin cmake cmake-curses-gui flex bison ngrep gobjc++ \
 ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools
 
 
@@ -185,33 +173,35 @@ apt-get -y --no-install-recommends install libavresample4
 apt-get -y --no-install-recommends install libavformat-dev 
 apt-get -y --no-install-recommends install libavcodec-dev 
 
-echo "Installing Libraries ...."
+echo "COMPLETED---> QT Packages"
+
 # Libraries
 ### REMOVED laditools liblash-compat-dev 
 # AV Libraries => WARNING It should be reviewed on every new debian version!!
 ### REMOVED libavcodec58 libavformat58 libavutil56 libavresample4 libavformat-dev libavcodec-dev 
 ### REMOVED librubberband-dev as it has dependency with libfftw3-double3 (>= 3.3.10) but 3.3.8-2ubuntu8 is to be installed
+### REPLACED libsndfile-dev to libsndfile1-dev
 apt-get -y --no-install-recommends install libx11-dev libx11-xcb-dev libxcb-util-dev libxkbcommon-dev \
 libfftw3-dev libmxml-dev zlib1g-dev fluid libfltk1.3-dev libfltk1.3-compat-headers libpango1.0-dev \
 libncurses5-dev liblo-dev dssi-dev libjpeg-dev libxpm-dev libcairo2-dev libglu1-mesa-dev \
 libasound2-dev dbus-x11 jackd2 libjack-jackd2-dev a2jmidid jack-midi-clock midisport-firmware libffi-dev \
 fontconfig-config libfontconfig1-dev libxft-dev libexpat-dev libglib2.0-dev libgettextpo-dev libsqlite3-dev \
-libglibmm-2.4-dev libeigen3-dev libsndfile-dev libsamplerate-dev libarmadillo-dev libreadline-dev \
+libglibmm-2.4-dev libeigen3-dev libsndfile1-dev libsamplerate-dev libarmadillo-dev libreadline-dev \
 lv2-c++-tools libxi-dev libgtk2.0-dev libgtkmm-2.4-dev liblrdf-dev libboost-system-dev libzita-convolver-dev \
 libzita-resampler-dev fonts-roboto libxcursor-dev libxinerama-dev mesa-common-dev libgl1-mesa-dev \
 libfreetype6-dev  libswscale-dev libcanberra-gtk-module '^libxcb.*-dev' \
 libcanberra-gtk3-module libxcb-cursor-dev libgtk-3-dev libxcb-util0-dev libxcb-keysyms1-dev libxcb-xkb-dev \
-libxkbcommon-x11-dev libssl-dev libmpg123-0 libmp3lame0 libqt5svg5-dev libxrender-dev \
-libclthreads-dev libclxclient-dev libqt5x11extras5-dev libqt5x11extras5
+libxkbcommon-x11-dev libssl-dev libmpg123-0 libmp3lame0 libxrender-dev \
+libclthreads-dev libclxclient-dev libqt5x11extras5-dev libqt5x11extras5 libqt5svg5-dev libportaudio2
 
-apt-get -y --no-install-recommends install libportaudio2
 #libjack-dev-session
 #non-ntk-dev
 #libgd2-xpm-dev
+echo "COMPLETED---> System Libraries"
 
 # Python
 ### REPLACE python3-pyqt4 to python3-pyqt5
-apt-get -y install python3 python3-dev cython3 python3-cffi python3-tk python3-dbus python3-mpmath python3-pil \
+apt-get -y install python3 python3-dev cython3 python3-cffi python3-tk python3-dbus python3-mpmath python3-pil python3-venv \
 python3-pil.imagetk python3-setuptools python3-pyqt5 python3-numpy-dev python3-evdev python3-soundfile python3-usb \
 python3-soundfile pyliblo-utils
 
@@ -222,48 +212,38 @@ fi
 pip3 install --upgrade pip
 
 echo "Creating Python venv ..."
-python3 -m venv $ZYNTHIAN_DIR
-
 if [ -d "$ZYNTHIAN_DIR/venv" ]; then
 	source "$ZYNTHIAN_DIR/venv/bin/activate"
-fi
+else
+    mkdir "$ZYNTHIAN_DIR"
+    cd "$ZYNTHIAN_DIR"
+    python3 -m venv venv --system-site-packages
+    python3 -m venv $ZYNTHIAN_DIR
+    source "$ZYNTHIAN_DIR/venv/bin/activate"
+fi 
 
 ### ADDED type-extensions
 pip3 install type-extensions typing_extensions
 
-pip3 install tornado==4.5 tornadostreamform websocket-client
-pip3 install jsonpickle oyaml JACK-Client psutil pexpect requests meson ninja
-pip3 install alsa-midi mido python-rtmidi==1.4.9 rpi_ws281x
-pip3 install abletonparsing pyrubberband sox
-pip3 install ffmpeg-python
-pip3 install mutagen
+pip3 install tornado tornadostreamform websocket-client
+pip3 install jsonpickle oyaml JACK-Client psutil pexpect requests meson ninja tornado_xstatic terminado xstatic XStatic_term.js
+pip3 install alsa-midi abletonparsing pyrubberband sox ffmpeg-python
+pip3 install adafruit-circuitpython-neopixel-spi mido mutagen python-rtmidi
 
-echo "Completed the installation of dependencies"
-
-### ADDED sox
-apt-get -y install sox
+echo "COMPLETED---> Python Dependencies"
 
 ### ADDED
 # Dependency for Zyncoder
-apt-get -y install libjack-dev
-apt-get -y install liblo-dev
-apt-get -y install libboost-all-dev
-apt-get -y install libgtk-3-dev
+apt-get -y install libjack-dev libncurses-dev libasound2-dev libasound2 libasound2-data libgpiod-dev autotools-dev
 
-# DEPENDENCY for Zynthian UI
-apt-get -y install libsndfile1-dev
+#apt-get -y install libboost-all-dev
+#apt-get -y install lua5.3 liblua5.3-dev
 
-# DEPENDENCY for
-apt-get -y install libcairo-dev
-apt-get -y install libasound2-dev libasound2 libasound2-data
-apt-get -y install libncurses-dev
-apt-get -y install gpiod libgpiod-dev
+# DEPENDENCY for libsndfile 
+# Needed for SFC_SET_LOOP_INFO
+apt-get -y install libmpg123-dev libmp3lame-dev libopus-dev libflac-dev libogg-dev
 
-
-# DEPENDENCY
-apt-get -y install lua5.3 liblua5.3-dev
-
-apt-get -y install libqt5svg5-dev
+echo "COMPLETED---> Additional Dependencies"
 #************************************************
 #------------------------------------------------
 # Create Zynthian Directory Tree & 
@@ -282,19 +262,30 @@ git clone -b "${ZYNTHIAN_SYS_BRANCH}" "${ZYNTHIAN_SYS_REPO}"
 
 # Install WiringPi
 $ZYNTHIAN_RECIPE_DIR/install_wiringpi.sh
+echo "COMPLETED---> WiringPi"
 
-# Zyncoder library
+# Zyncoder libraryclear
 cd $ZYNTHIAN_DIR
 git clone -b "${ZYNTHIAN_ZYNCODER_BRANCH}" "${ZYNTHIAN_ZYNCODER_REPO}"
 ./zyncoder/build.sh
 
-echo "Zyncoder Library ...complete"
+echo "COMPLETED---> Zyncoder Library"
+
+# Install rubberband
+$ZYNTHIAN_RECIPE_DIR/install_rubberband.sh
+echo "COMPLETED---> rubberband"
+
+# Install ibsndfile
+$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
+echo "COMPLETED---> libsndfile"
 
 # Zynthian UI
 cd $ZYNTHIAN_DIR
-### COMMENTED for code modification during compilation
-#git clone -b "${ZYNTHIAN_UI_BRANCH}" "${ZYNTHIAN_UI_REPO}"
+git clone -b "${ZYNTHIAN_UI_BRANCH}" "${ZYNTHIAN_UI_REPO}"
 cd $ZYNTHIAN_UI_DIR
+sed -i 's/add_definitions(-Werror/add_definitions(-Werror -Wno-format -Wno-format-extra-args/' $ZYNTHIAN_UI_DIR/zynlibs/zynaudioplayer/CMakeLists.txt
+sed -i 's/add_definitions(-Werror/add_definitions(-Werror -Wno-format -Wno-format-extra-args/' $ZYNTHIAN_UI_DIR/zynlibs/zynmixer/CMakeLists.txt
+
 if [ -d "zynlibs" ]; then
 	find ./zynlibs -type f -name build.sh -exec {} \;
 else
@@ -306,7 +297,7 @@ else
 	fi
 fi
 
-echo "Zynthian UI... complete"
+echo "COMPLETED---> Zynthian UI"
 
 # Zynthian Data
 cd $ZYNTHIAN_DIR
@@ -352,6 +343,7 @@ mkdir "$ZYNTHIAN_PLUGINS_DIR/lv2"
 # Copy default snapshots
 cp -a $ZYNTHIAN_DATA_DIR/snapshots/* $ZYNTHIAN_MY_DATA_DIR/snapshots/000
 
+echo "COMPLETED---> Zynthian Data Setup"
 #************************************************
 #------------------------------------------------
 # System Adjustments
@@ -366,48 +358,23 @@ fi
 
 # Run configuration script
 $ZYNTHIAN_SYS_DIR/scripts/update_zynthian_data.sh
-$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
+#$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
 
 # Configure Systemd Services
-systemctl daemon-reload
-systemctl enable dhcpcd
-systemctl enable avahi-daemon
-systemctl enable devmon@root
-#systemctl disable raspi-config
-systemctl disable cron
-systemctl disable rsyslog
-systemctl disable ntp
-#systemctl disable htpdate
-systemctl disable wpa_supplicant
-systemctl disable hostapd
-systemctl disable dnsmasq
-systemctl disable unattended-upgrades
-systemctl disable apt-daily.timer
-#systemctl mask packagekit
-#systemctl mask polkit
-#systemctl disable serial-getty@ttyAMA0.service
-#systemctl disable sys-devices-platform-soc-3f201000.uart-tty-ttyAMA0.device
-systemctl enable backlight
-systemctl enable cpu-performance
-systemctl enable splash-screen
-systemctl enable wifi-setup
-systemctl enable jack2
-systemctl enable mod-ttymidi
-systemctl enable a2jmidid
-systemctl enable zynthian
-systemctl enable zynthian-webconf
-systemctl enable zynthian-config-on-boot
+# UNCOMMNET
+#$ZYNTHIAN_SYS_DIR/scripts/configure_systemd_services.sh
 
+# UNCOMMNET
 # Setup loading of Zynthian Environment variables ...
-echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc
+#echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc
 # => Shell & Login Config
-echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
+#echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
 
 # On first boot, resize SD partition, regenerate keys, etc.
 #### COMMENT --- need to remove it later
 #$ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
 
-
+echo "COMPLETED---> Zynthian System Adjustments"
 #************************************************
 #------------------------------------------------
 # Compile / Install Required Libraries
@@ -420,6 +387,7 @@ apt-get -y install jack-midi-clock midisport-firmware
 # Install Jack2
 $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 
+echo "COMPLETED---> Jack2"
 # Install alsaseq Python Library
 #$ZYNTHIAN_RECIPE_DIR/install_alsaseq.sh
 
@@ -429,77 +397,100 @@ $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 # Install pyliblo library (liblo OSC library for Python)
 $ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
 
+echo "COMPLETED---> pyliblo"
 # Install mod-ttymidi (MOD's ttymidi version with jackd MIDI support)
 $ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
 
+echo "COMPLETED---> mod-ttymidi"
 # Install LV2 lilv library
 $ZYNTHIAN_RECIPE_DIR/install_lv2_lilv.sh
 
+echo "COMPLETED---> LV2 lilv library"
 # Install the LV2 C++ Tool Kit
 $ZYNTHIAN_RECIPE_DIR/install_lvtk.sh
 
+echo "COMPLETED---> LV2 C++ Tool Kit"
 # Install LV2 Jalv Plugin Host
 $ZYNTHIAN_RECIPE_DIR/install_lv2_jalv.sh
 
+echo "COMPLETED---> LV2 Jalv Plugin Host"
 # Install Aubio Library & Tools
 $ZYNTHIAN_RECIPE_DIR/install_aubio.sh
 
+echo "COMPLETED---> Aubio Library & Tool"
 # Install jpmidi (MID player for jack with transport sync)
 $ZYNTHIAN_RECIPE_DIR/install_jpmidi.sh
 
+echo "COMPLETED---> jpmidi"
 # Install jack_capture (jackd audio recorder)
 $ZYNTHIAN_RECIPE_DIR/install_jack_capture.sh
 
+echo "COMPLETED---> jack_capture"
 # Install jack_smf utils (jackd MID-file player/recorder)
 $ZYNTHIAN_RECIPE_DIR/install_jack-smf-utils.sh
 
+echo "COMPLETED---> jack_smf utils"
 # Install touchosc2midi (TouchOSC Bridge)
 ### FIX  commented for compile errors
 #$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
 
+echo "COMPLETED---> touchosc2midi"
 # Install jackclient (jack-client python library)
 $ZYNTHIAN_RECIPE_DIR/install_jackclient-python.sh
 
+echo "COMPLETED---> jackclient"
 # Install QMidiNet (MIDI over IP Multicast)
 $ZYNTHIAN_RECIPE_DIR/install_qmidinet.sh
 
+echo "COMPLETED---> QMidiNet"
 # Install jackrtpmidid (jack RTP-MIDI daemon)
 $ZYNTHIAN_RECIPE_DIR/install_jackrtpmidid.sh
 
+echo "COMPLETED---> jackrtpmidid"
 # Install the DX7 SysEx parser
 $ZYNTHIAN_RECIPE_DIR/install_dxsyx.sh
 
+echo "COMPLETED---> DX7 SysEx parser"
 # Install preset2lv2 (Convert native presets to LV2)
 $ZYNTHIAN_RECIPE_DIR/install_preset2lv2.sh
 
+echo "COMPLETED---> preset2lv2"
 # Install QJackCtl
 $ZYNTHIAN_RECIPE_DIR/install_qjackctl.sh
 
+echo "COMPLETED---> QJackCtl"
 #Install Patchage
 $ZYNTHIAN_RECIPE_DIR/install_patchage.sh
 
+echo "COMPLETED---> Patchage"
 # Install the njconnect Jack Graph Manager
 $ZYNTHIAN_RECIPE_DIR/install_njconnect.sh
 
+echo "COMPLETED---> njconnect"
 # Install Mutagen (when available, use pip3 install)
 $ZYNTHIAN_RECIPE_DIR/install_mutagen.sh
 
+echo "COMPLETED---> Mutagen"
 # Install VL53L0X library (Distance Sensor)
 $ZYNTHIAN_RECIPE_DIR/install_VL53L0X.sh
 
+echo "COMPLETED---> VL53L0X"
 # Install MCP4748 library (Analog Output / CV-OUT)
 $ZYNTHIAN_RECIPE_DIR/install_MCP4728.sh
 
+echo "COMPLETED---> MCP4748"
 # Install noVNC web viewer
 $ZYNTHIAN_RECIPE_DIR/install_noVNC.sh
 
+echo "COMPLETED---> noVNC"
 # Install terminal emulator for tornado (webconf)
 $ZYNTHIAN_RECIPE_DIR/install_terminado.sh
 
+echo "COMPLETED---> terminado"
 # Install DT overlays for waveshare displays and others
 $ZYNTHIAN_RECIPE_DIR/install_waveshare-dtoverlays.sh
 
-echo "Completed Library Installation ..."
+echo "COMPLETED---> DT overlays for waveshare"
 #************************************************
 #------------------------------------------------
 # Compile / Install Synthesis Software
@@ -510,33 +501,34 @@ echo "Completed Library Installation ..."
 #$ZYNTHIAN_RECIPE_DIR/install_zynaddsubfx.sh
 apt-get -y install zynaddsubfx
 
+echo "COMPLETED---> ZynAddSubFX"
 # Install Fluidsynth & SF2 SondFonts
 apt-get -y install fluidsynth libfluidsynth-dev fluid-soundfont-gm fluid-soundfont-gs timgm6mb-soundfont
 # Create SF2 soft links
 ln -s /usr/share/sounds/sf2/*.sf2 $ZYNTHIAN_DATA_DIR/soundfonts/sf2
 
+echo "COMPLETED---> Fluidsynth & SF2 SondFonts"
 # Install Squishbox SF2 soundfonts
 $ZYNTHIAN_RECIPE_DIR/install_squishbox_sf2.sh
 
-echo "Completed Install Synthesis Software ..."
-
+echo "COMPLETED---> Squishbox SF2 soundfonts"
 # Install Polyphone (SF2 editor)
 #$ZYNTHIAN_RECIPE_DIR/install_polyphone.sh
 
 # Install Sfizz (SFZ player)
-#$ZYNTHIAN_RECIPE_DIR/install_sfizz.sh
-apt-get -y install sfizz
+$ZYNTHIAN_RECIPE_DIR/install_sfizz.sh
+#apt-get -y install sfizz
 
-echo "Install Linuxsmpler ..."
+echo "COMPLETED---> Sfizz"
 # Install Linuxsampler
 #$ZYNTHIAN_RECIPE_DIR/install_linuxsampler_stable.sh
 apt-get -y install linuxsampler gigtools
 
-echo "Install Fantasia ..."
+echo "COMPLETED---> Linuxsampler"
 # Install Fantasia (linuxsampler Java GUI)
 $ZYNTHIAN_RECIPE_DIR/install_fantasia.sh
 
-echo "Install setBfree ..."
+echo "COMPLETED---> Fantasia"
 # Install setBfree (Hammond B3 Emulator)
 $ZYNTHIAN_RECIPE_DIR/install_setbfree.sh
 # Setup user config directories
@@ -545,10 +537,11 @@ mkdir setbfree
 ln -s /usr/local/share/setBfree/cfg/default.cfg ./setbfree
 cp -a $ZYNTHIAN_DATA_DIR/setbfree/cfg/zynthian_my.cfg ./setbfree/zynthian.cfg
 
-echo "Install Pianoteq Demo ..."
+echo "COMPLETED---> setbfree"
 # Install Pianoteq Demo (Piano Physical Emulation)
 $ZYNTHIAN_RECIPE_DIR/install_pianoteq_demo.sh
 
+echo "COMPLETED---> Pianoteq Demo"
 ### DEPENDENCY
 apt-get -y install libclxclient-dev
 
@@ -556,14 +549,13 @@ apt-get -y install libclxclient-dev
 #apt-get -y install aeolus
 $ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
 
-echo "Install Mididings ..."
+echo "COMPLETED---> Aeolus"
 # Install Mididings (MIDI route & filter)
 #apt-get -y install mididings
 pip3 install decorator
 $ZYNTHIAN_RECIPE_DIR/install_mididings.sh
 
-echo "MIDI route  & filters completed ..."
-
+echo "COMPLETED---> Mididings"
 # Install Pure Data stuff
 apt-get -y install puredata puredata-core puredata-utils python3-yaml \
 pd-lua pd-moonlib pd-pdstring pd-markex pd-iemnet pd-plugin pd-ekext pd-import pd-bassemu pd-readanysf pd-pddp \
@@ -575,6 +567,7 @@ pd-pdp pd-mjlib pd-cyclone pd-jmmmp pd-3dp pd-boids pd-mapping pd-maxlib
 mkdir /root/Pd
 mkdir /root/Pd/externals
 
+echo "COMPLETED---> Pure Data"
 #------------------------------------------------
 # Install MOD stuff
 #------------------------------------------------
@@ -582,16 +575,17 @@ mkdir /root/Pd/externals
 #Install MOD-HOST
 $ZYNTHIAN_RECIPE_DIR/install_mod-host.sh
 
+echo "COMPLETED---> MOD-HOST"
 # Install browsepy
 $ZYNTHIAN_RECIPE_DIR/install_mod-browsepy.sh
 
+echo "COMPLETED---> browsepy"
 #Install MOD-UI
 $ZYNTHIAN_RECIPE_DIR/install_mod-ui.sh
 
+echo "COMPLETED---> MOD-UI"
 #Install MOD-SDK
 #$ZYNTHIAN_RECIPE_DIR/install_mod-sdk.sh
-
-echo "Install MOD completed ..."
 
 #------------------------------------------------
 # Install Plugins
@@ -599,8 +593,45 @@ echo "Install MOD completed ..."
 cd $ZYNTHIAN_SYS_DIR/scripts
 ./setup_plugins_rbpi.sh
 
+echo "COMPLETED---> Install Plugins"
 #------------------------------------------------
 # Install Ableton Link Support
 #------------------------------------------------
 $ZYNTHIAN_RECIPE_DIR/install_hylia.sh
 $ZYNTHIAN_RECIPE_DIR/install_pd_extra_abl_link.sh
+
+echo "COMPLETED---> Ableton Link Support"
+#************************************************
+#------------------------------------------------
+# Final Configuration
+#------------------------------------------------
+#************************************************
+
+# Create flags to avoid running unneeded recipes.update when updating zynthian software
+if [ ! -d "$ZYNTHIAN_CONFIG_DIR/updates" ]; then
+	mkdir "$ZYNTHIAN_CONFIG_DIR/updates"
+fi
+
+# Run configuration script before ending
+# UNCOMMNET
+#$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
+
+echo "COMPLETED---> Config scripts"
+#************************************************
+#------------------------------------------------
+# End & Clean
+#------------------------------------------------
+#************************************************
+
+# UNCOMMNET
+#Block MS repo from being installed
+#apt-mark hold raspberrypi-sys-mods
+#touch /etc/apt/trusted.gpg.d/microsoft.gpg
+
+# Clean
+apt-get -y autoremove # Remove unneeded packages
+if [[ "$ZYNTHIAN_SETUP_APT_CLEAN" == "yes" ]]; then # Clean apt cache (if instructed via zynthian_envars.sh)
+    apt-get clean
+fi
+
+echo "COMPLETED---> Setup"
