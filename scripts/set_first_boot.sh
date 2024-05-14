@@ -60,4 +60,4 @@ sleep 3
 sync
 
 # Power Off
-poweroff   
+#poweroff   

@@ -1,4 +1,4 @@
-#!/bin/bash:
+#!/bin/bash
 
 cd $ZYNTHIAN_SW_DIR
 if [ -d "libsndfile" ]; then

@@ -358,21 +358,17 @@ fi
 
 # Run configuration script
 $ZYNTHIAN_SYS_DIR/scripts/update_zynthian_data.sh
-#$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
 
 # Configure Systemd Services
-# UNCOMMNET
-#$ZYNTHIAN_SYS_DIR/scripts/configure_systemd_services.sh
+$ZYNTHIAN_SYS_DIR/scripts/configure_systemd_services.sh
 
-# UNCOMMNET
 # Setup loading of Zynthian Environment variables ...
-#echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc
-# => Shell & Login Config
-#echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
+echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc
+# Shell & Login Config
+echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
 
 # On first boot, resize SD partition, regenerate keys, etc.
-#### COMMENT --- need to remove it later
-#$ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
+$ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
 
 echo "COMPLETED---> Zynthian System Adjustments"
 #************************************************
@@ -380,218 +376,7 @@ echo "COMPLETED---> Zynthian System Adjustments"
 # Compile / Install Required Libraries
 #------------------------------------------------
 #************************************************
-
-# Install some extra packages:
-apt-get -y install jack-midi-clock midisport-firmware
-
-# Install Jack2
-$ZYNTHIAN_RECIPE_DIR/install_jack2.sh
-
-echo "COMPLETED---> Jack2"
-# Install alsaseq Python Library
-#$ZYNTHIAN_RECIPE_DIR/install_alsaseq.sh
-
-# Install NTK library
-#$ZYNTHIAN_RECIPE_DIR/install_ntk.sh
-
-# Install pyliblo library (liblo OSC library for Python)
-$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
-
-echo "COMPLETED---> pyliblo"
-# Install mod-ttymidi (MOD's ttymidi version with jackd MIDI support)
-$ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
-
-echo "COMPLETED---> mod-ttymidi"
-# Install LV2 lilv library
-$ZYNTHIAN_RECIPE_DIR/install_lv2_lilv.sh
-
-echo "COMPLETED---> LV2 lilv library"
-# Install the LV2 C++ Tool Kit
-$ZYNTHIAN_RECIPE_DIR/install_lvtk.sh
-
-echo "COMPLETED---> LV2 C++ Tool Kit"
-# Install LV2 Jalv Plugin Host
-$ZYNTHIAN_RECIPE_DIR/install_lv2_jalv.sh
-
-echo "COMPLETED---> LV2 Jalv Plugin Host"
-# Install Aubio Library & Tools
-$ZYNTHIAN_RECIPE_DIR/install_aubio.sh
-
-echo "COMPLETED---> Aubio Library & Tool"
-# Install jpmidi (MID player for jack with transport sync)
-$ZYNTHIAN_RECIPE_DIR/install_jpmidi.sh
-
-echo "COMPLETED---> jpmidi"
-# Install jack_capture (jackd audio recorder)
-$ZYNTHIAN_RECIPE_DIR/install_jack_capture.sh
-
-echo "COMPLETED---> jack_capture"
-# Install jack_smf utils (jackd MID-file player/recorder)
-$ZYNTHIAN_RECIPE_DIR/install_jack-smf-utils.sh
-
-echo "COMPLETED---> jack_smf utils"
-# Install touchosc2midi (TouchOSC Bridge)
-### FIX  commented for compile errors
-#$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
-
-echo "COMPLETED---> touchosc2midi"
-# Install jackclient (jack-client python library)
-$ZYNTHIAN_RECIPE_DIR/install_jackclient-python.sh
-
-echo "COMPLETED---> jackclient"
-# Install QMidiNet (MIDI over IP Multicast)
-$ZYNTHIAN_RECIPE_DIR/install_qmidinet.sh
-
-echo "COMPLETED---> QMidiNet"
-# Install jackrtpmidid (jack RTP-MIDI daemon)
-$ZYNTHIAN_RECIPE_DIR/install_jackrtpmidid.sh
-
-echo "COMPLETED---> jackrtpmidid"
-# Install the DX7 SysEx parser
-$ZYNTHIAN_RECIPE_DIR/install_dxsyx.sh
-
-echo "COMPLETED---> DX7 SysEx parser"
-# Install preset2lv2 (Convert native presets to LV2)
-$ZYNTHIAN_RECIPE_DIR/install_preset2lv2.sh
-
-echo "COMPLETED---> preset2lv2"
-# Install QJackCtl
-$ZYNTHIAN_RECIPE_DIR/install_qjackctl.sh
-
-echo "COMPLETED---> QJackCtl"
-#Install Patchage
-$ZYNTHIAN_RECIPE_DIR/install_patchage.sh
-
-echo "COMPLETED---> Patchage"
-# Install the njconnect Jack Graph Manager
-$ZYNTHIAN_RECIPE_DIR/install_njconnect.sh
-
-echo "COMPLETED---> njconnect"
-# Install Mutagen (when available, use pip3 install)
-$ZYNTHIAN_RECIPE_DIR/install_mutagen.sh
-
-echo "COMPLETED---> Mutagen"
-# Install VL53L0X library (Distance Sensor)
-$ZYNTHIAN_RECIPE_DIR/install_VL53L0X.sh
-
-echo "COMPLETED---> VL53L0X"
-# Install MCP4748 library (Analog Output / CV-OUT)
-$ZYNTHIAN_RECIPE_DIR/install_MCP4728.sh
-
-echo "COMPLETED---> MCP4748"
-# Install noVNC web viewer
-$ZYNTHIAN_RECIPE_DIR/install_noVNC.sh
-
-echo "COMPLETED---> noVNC"
-# Install terminal emulator for tornado (webconf)
-$ZYNTHIAN_RECIPE_DIR/install_terminado.sh
-
-echo "COMPLETED---> terminado"
-# Install DT overlays for waveshare displays and others
-$ZYNTHIAN_RECIPE_DIR/install_waveshare-dtoverlays.sh
-
-echo "COMPLETED---> DT overlays for waveshare"
-#************************************************
-#------------------------------------------------
-# Compile / Install Synthesis Software
-#------------------------------------------------
-#************************************************
-
-# Install ZynAddSubFX
-#$ZYNTHIAN_RECIPE_DIR/install_zynaddsubfx.sh
-apt-get -y install zynaddsubfx
-
-echo "COMPLETED---> ZynAddSubFX"
-# Install Fluidsynth & SF2 SondFonts
-apt-get -y install fluidsynth libfluidsynth-dev fluid-soundfont-gm fluid-soundfont-gs timgm6mb-soundfont
-# Create SF2 soft links
-ln -s /usr/share/sounds/sf2/*.sf2 $ZYNTHIAN_DATA_DIR/soundfonts/sf2
-
-echo "COMPLETED---> Fluidsynth & SF2 SondFonts"
-# Install Squishbox SF2 soundfonts
-$ZYNTHIAN_RECIPE_DIR/install_squishbox_sf2.sh
-
-echo "COMPLETED---> Squishbox SF2 soundfonts"
-# Install Polyphone (SF2 editor)
-#$ZYNTHIAN_RECIPE_DIR/install_polyphone.sh
-
-# Install Sfizz (SFZ player)
-$ZYNTHIAN_RECIPE_DIR/install_sfizz.sh
-#apt-get -y install sfizz
-
-echo "COMPLETED---> Sfizz"
-# Install Linuxsampler
-#$ZYNTHIAN_RECIPE_DIR/install_linuxsampler_stable.sh
-apt-get -y install linuxsampler gigtools
-
-echo "COMPLETED---> Linuxsampler"
-# Install Fantasia (linuxsampler Java GUI)
-$ZYNTHIAN_RECIPE_DIR/install_fantasia.sh
-
-echo "COMPLETED---> Fantasia"
-# Install setBfree (Hammond B3 Emulator)
-$ZYNTHIAN_RECIPE_DIR/install_setbfree.sh
-# Setup user config directories
-cd $ZYNTHIAN_CONFIG_DIR
-mkdir setbfree
-ln -s /usr/local/share/setBfree/cfg/default.cfg ./setbfree
-cp -a $ZYNTHIAN_DATA_DIR/setbfree/cfg/zynthian_my.cfg ./setbfree/zynthian.cfg
-
-echo "COMPLETED---> setbfree"
-# Install Pianoteq Demo (Piano Physical Emulation)
-$ZYNTHIAN_RECIPE_DIR/install_pianoteq_demo.sh
-
-echo "COMPLETED---> Pianoteq Demo"
-### DEPENDENCY
-apt-get -y install libclxclient-dev
-
-# Install Aeolus (Pipe Organ Emulator)
-#apt-get -y install aeolus
-$ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
-
-echo "COMPLETED---> Aeolus"
-# Install Mididings (MIDI route & filter)
-#apt-get -y install mididings
-pip3 install decorator
-$ZYNTHIAN_RECIPE_DIR/install_mididings.sh
-
-echo "COMPLETED---> Mididings"
-# Install Pure Data stuff
-apt-get -y install puredata puredata-core puredata-utils python3-yaml \
-pd-lua pd-moonlib pd-pdstring pd-markex pd-iemnet pd-plugin pd-ekext pd-import pd-bassemu pd-readanysf pd-pddp \
-pd-zexy pd-list-abs pd-flite pd-windowing pd-fftease pd-bsaylor pd-osc pd-sigpack pd-hcs pd-pdogg pd-purepd \
-pd-beatpipe pd-freeverb pd-iemlib pd-smlib pd-hid pd-csound pd-aubio pd-earplug pd-wiimote pd-pmpd pd-motex \
-pd-arraysize pd-ggee pd-chaos pd-iemmatrix pd-comport pd-libdir pd-vbap pd-cxc pd-lyonpotpourri pd-iemambi \
-pd-pdp pd-mjlib pd-cyclone pd-jmmmp pd-3dp pd-boids pd-mapping pd-maxlib
-
-mkdir /root/Pd
-mkdir /root/Pd/externals
-
-echo "COMPLETED---> Pure Data"
-#------------------------------------------------
-# Install MOD stuff
-#------------------------------------------------
-
-#Install MOD-HOST
-$ZYNTHIAN_RECIPE_DIR/install_mod-host.sh
-
-echo "COMPLETED---> MOD-HOST"
-# Install browsepy
-$ZYNTHIAN_RECIPE_DIR/install_mod-browsepy.sh
-
-echo "COMPLETED---> browsepy"
-#Install MOD-UI
-$ZYNTHIAN_RECIPE_DIR/install_mod-ui.sh
-
-echo "COMPLETED---> MOD-UI"
-#Install MOD-SDK
-#$ZYNTHIAN_RECIPE_DIR/install_mod-sdk.sh
-
-#------------------------------------------------
-# Install Plugins
-#------------------------------------------------
-cd $ZYNTHIAN_SYS_DIR/scripts
-./setup_plugins_rbpi.sh
+$ZYNTHIAN_SYS_DIR/scripts/setup_libraries.sh
 
 echo "COMPLETED---> Install Plugins"
 #------------------------------------------------
@@ -613,8 +398,7 @@ if [ ! -d "$ZYNTHIAN_CONFIG_DIR/updates" ]; then
 fi
 
 # Run configuration script before ending
-# UNCOMMNET
-#$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
+$ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
 
 echo "COMPLETED---> Config scripts"
 #************************************************

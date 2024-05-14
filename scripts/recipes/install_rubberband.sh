@@ -1,6 +1,4 @@
-#!/bin/bash:
-
-ZYNTHIAN_SW_DIR=/home/bikash/Development/temp
+#!/bin/bash
 
 cd $ZYNTHIAN_SW_DIR
 if [ -d "rubberband" ]; then
