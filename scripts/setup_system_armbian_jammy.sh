@@ -373,13 +373,7 @@ echo "COMPLETED---> Install Libraries"
 cd $ZYNTHIAN_SYS_DIR/scripts
 ./setup_plugins_rbpi.sh
 echo "COMPLETED---> Install Plugins"
-#------------------------------------------------
-# Install Ableton Link Support
-#------------------------------------------------
-$ZYNTHIAN_RECIPE_DIR/install_hylia.sh
-$ZYNTHIAN_RECIPE_DIR/install_pd_extra_abl_link.sh
 
-echo "COMPLETED---> Ableton Link Support"
 #************************************************
 #------------------------------------------------
 # Final Configuration
