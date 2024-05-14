@@ -260,11 +260,7 @@ mkdir "$ZYNTHIAN_SW_DIR"
 cd $ZYNTHIAN_DIR
 git clone -b "${ZYNTHIAN_SYS_BRANCH}" "${ZYNTHIAN_SYS_REPO}"
 
-# Install WiringPi
-$ZYNTHIAN_RECIPE_DIR/install_wiringpi.sh
-echo "COMPLETED---> WiringPi"
-
-# Zyncoder libraryclear
+# Zyncoder library
 cd $ZYNTHIAN_DIR
 git clone -b "${ZYNTHIAN_ZYNCODER_BRANCH}" "${ZYNTHIAN_ZYNCODER_REPO}"
 ./zyncoder/build.sh
@@ -286,16 +282,7 @@ cd $ZYNTHIAN_UI_DIR
 sed -i 's/add_definitions(-Werror/add_definitions(-Werror -Wno-format -Wno-format-extra-args/' $ZYNTHIAN_UI_DIR/zynlibs/zynaudioplayer/CMakeLists.txt
 sed -i 's/add_definitions(-Werror/add_definitions(-Werror -Wno-format -Wno-format-extra-args/' $ZYNTHIAN_UI_DIR/zynlibs/zynmixer/CMakeLists.txt
 
-if [ -d "zynlibs" ]; then
-	find ./zynlibs -type f -name build.sh -exec {} \;
-else
-	if [ -d "jackpeak" ]; then
-		./jackpeak/build.sh
-	fi
-	if [ -d "zynseq" ]; then
-		./zynseq/build.sh
-	fi
-fi
+find ./zynlibs -type f -name build.sh -exec {} \;
 
 echo "COMPLETED---> Zynthian UI"
 
@@ -376,8 +363,15 @@ echo "COMPLETED---> Zynthian System Adjustments"
 # Compile / Install Required Libraries
 #------------------------------------------------
 #************************************************
-$ZYNTHIAN_SYS_DIR/scripts/setup_libraries.sh
+cd $ZYNTHIAN_SYS_DIR/scripts
+./setup_libraries.sh
+echo "COMPLETED---> Install Libraries"
 
+#------------------------------------------------
+# Install Plugins
+#------------------------------------------------
+cd $ZYNTHIAN_SYS_DIR/scripts
+./setup_plugins_rbpi.sh
 echo "COMPLETED---> Install Plugins"
 #------------------------------------------------
 # Install Ableton Link Support

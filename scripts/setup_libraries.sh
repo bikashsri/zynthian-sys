@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ########################################################################
-#  Setup Plugins and Libraries
+#  Setup Libraries
 ########################################################################
-source "zynthian_envars_extended.sh"
+source "$ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh"
 
 LOG_DIR=$(pwd)/log
 mkdir -p $LOG_DIR
@@ -181,10 +181,3 @@ cd $ZYNTHIAN_CONFIG_DIR
 mkdir setbfree
 ln -s /usr/local/share/setBfree/cfg/default.cfg ./setbfree
 cp -a $ZYNTHIAN_DATA_DIR/setbfree/cfg/zynthian_my.cfg ./setbfree/zynthian.cfg
-
-##------------------------------------------------
-## Install Plugins
-##------------------------------------------------
-cd $ZYNTHIAN_SYS_DIR/scripts
-./setup_plugins_rbpi.sh
-
