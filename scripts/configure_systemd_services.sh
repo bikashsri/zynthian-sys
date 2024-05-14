@@ -8,11 +8,11 @@
 #
 #******************************************************************************
 
-# Configure Systemd Services
+# Separated Configure Systemd Services
 systemctl daemon-reload
 systemctl enable dhcpcd
 systemctl enable avahi-daemon
-systemctl enable devmon@root
+#systemctl enable devmon@root
 #systemctl disable raspi-config
 systemctl disable cron
 systemctl disable rsyslog
