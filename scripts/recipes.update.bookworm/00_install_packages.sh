@@ -249,6 +249,38 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	systemctl start avahi-daemon
 fi
 
+patchlevel="20240517.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove surge
+fi
+
+patchlevel="20240522.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_jackrtpmidid.sh
+fi
+
+patchlevel="20240522.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
+fi
+
+patchlevel="20240525.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	rm /zynthian/zynthian-my-data/presets/aeolus.json
+fi
+
+patchlevel="20240526.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove pyliblo-utils
+	$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
+	$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
+fi
+
 # 2024-01-08: Install alsa-midi (chain_manager)
 #if is_python_module_installed.py alsa-midi; then
 #	pip3 install alsa-midi
