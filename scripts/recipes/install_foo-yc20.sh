@@ -15,6 +15,10 @@ fi
 
 # Install Faust code (v 0.9.73)
 cd $ZYNTHIAN_SW_DIR
+if [ -d faust-0.9.73 ] then
+	rm -rf faust-0.9.73
+fi
+
 git clone --single-branch -b 0.9.73-mr2 https://github.com/grame-cncm/faust.git faust-0.9.73
 cd faust-0.9.73/architecture/faust/audio
 ln -s ../dsp/dsp.h .
