@@ -7,9 +7,7 @@ fi
 
 git clone -b zynthian https://github.com/riban-bw/libsndfile.git
 cd libsndfile
-./build_zynpackage.py
-
-#cmake .
-#make & make install
+cmake .
+make & make install
 
 

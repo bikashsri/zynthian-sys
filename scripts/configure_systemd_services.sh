@@ -21,8 +21,10 @@ systemctl disable ntp
 systemctl disable wpa_supplicant
 systemctl disable hostapd
 systemctl disable dnsmasq
-systemctl disable unattended-upgrades
+#systemctl disable unattended-upgrades
 systemctl disable apt-daily.timer
+
+# Zynthian specific systemd services
 systemctl enable backlight
 systemctl enable cpu-performance
 systemctl enable splash-screen
