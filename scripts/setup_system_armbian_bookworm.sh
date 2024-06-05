@@ -250,8 +250,9 @@ echo "COMPLETED---> Zyncoder Library"
 #echo "COMPLETED---> rubberband"
 
 # Install ibsndfile
-$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
-echo "COMPLETED---> libsndfile"
+#cp /home/bikash/Development_Armbian/zynthian-sys/scripts/recipes/install_sndfile.sh /zynthian/zynthian-sys/scripts/recipes
+#$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
+#echo "COMPLETED---> libsndfile"
 
 # Zynthian UI
 cd $ZYNTHIAN_DIR
