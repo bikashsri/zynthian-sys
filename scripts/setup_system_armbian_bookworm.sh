@@ -250,9 +250,8 @@ echo "COMPLETED---> Zyncoder Library"
 #echo "COMPLETED---> rubberband"
 
 # Install ibsndfile
-#cp /home/bikash/Development_Armbian/zynthian-sys/scripts/recipes/install_sndfile.sh /zynthian/zynthian-sys/scripts/recipes
-#$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
-#echo "COMPLETED---> libsndfile"
+$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
+echo "COMPLETED---> libsndfile"
 
 # Zynthian UI
 cd $ZYNTHIAN_DIR
@@ -366,11 +365,6 @@ $ZYNTHIAN_SYS_DIR/scripts/configure_systemd_services.sh
 
 echo "COMPLETED---> Zynthian System Adjustments"
 
-## Temp copy
-cp /home/bikash/Development_Armbian/zynthian-sys/scripts/configure_systemd_services.sh /zynthian/zynthian-sys/scripts/
-cp /home/bikash/Development_Armbian/zynthian-sys/scripts/setup_libraries.sh /zynthian/zynthian-sys/scripts/
-cp /home/bikash/Development_Armbian/zynthian-sys/scripts/recipes/install_aeolus.sh /zynthian/zynthian-sys/scripts/recipes
-cp /home/bikash/Development_Armbian/zynthian-sys/scripts/recipes/install_patchage.sh /zynthian/zynthian-sys/scripts/recipes
 #------------------------------------------------
 # Compile / Install Required Libraries
 #------------------------------------------------

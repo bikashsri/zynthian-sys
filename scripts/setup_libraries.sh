@@ -116,8 +116,6 @@ mkdir /root/Pd/externals
 # List of Required Libraries
 recipes=(
 $ZYNTHIAN_RECIPE_DIR/install_wiringpi.sh
-#$ZYNTHIAN_RECIPE_DIR/install_rubberband.sh
-#->$ZYNTHIAN_RECIPE_DIR/install_sndfile.sh
 $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 #$ZYNTHIAN_RECIPE_DIR/install_alsaseq.sh
 #$ZYNTHIAN_RECIPE_DIR/install_ntk.sh
@@ -136,15 +134,15 @@ $ZYNTHIAN_RECIPE_DIR/install_qmidinet.sh
 $ZYNTHIAN_RECIPE_DIR/install_jackrtpmidid.sh
 $ZYNTHIAN_RECIPE_DIR/install_dxsyx.sh
 $ZYNTHIAN_RECIPE_DIR/install_preset2lv2.sh
-$ZYNTHIAN_RECIPE_DIR/install_qjackctl.sh
+#$ZYNTHIAN_RECIPE_DIR/install_qjackctl.sh
 $ZYNTHIAN_RECIPE_DIR/install_ganv.sh
 $ZYNTHIAN_RECIPE_DIR/install_patchage.sh
 $ZYNTHIAN_RECIPE_DIR/install_njconnect.sh
-$ZYNTHIAN_RECIPE_DIR/install_mutagen.sh
+#$ZYNTHIAN_RECIPE_DIR/install_mutagen.sh
 $ZYNTHIAN_RECIPE_DIR/install_VL53L0X.sh
 $ZYNTHIAN_RECIPE_DIR/install_MCP4728.sh
 $ZYNTHIAN_RECIPE_DIR/install_noVNC.sh
-$ZYNTHIAN_RECIPE_DIR/install_terminado.sh
+#$ZYNTHIAN_RECIPE_DIR/install_terminado.sh
 $ZYNTHIAN_RECIPE_DIR/install_waveshare-dtoverlays.sh
 #$ZYNTHIAN_RECIPE_DIR/install_zynaddsubfx.sh
 $ZYNTHIAN_RECIPE_DIR/install_squishbox_sf2.sh
@@ -157,12 +155,12 @@ $ZYNTHIAN_RECIPE_DIR/install_pianoteq_demo.sh
 $ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
 $ZYNTHIAN_RECIPE_DIR/install_mididings.sh
 $ZYNTHIAN_RECIPE_DIR/install_mod-host.sh
-$ZYNTHIAN_RECIPE_DIR/install_mod-browsepy.sh
+#$ZYNTHIAN_RECIPE_DIR/install_mod-browsepy.sh --> Installed with mod-ui
 $ZYNTHIAN_RECIPE_DIR/install_mod-ui.sh
 #$ZYNTHIAN_RECIPE_DIR/install_mod-sdk.sh
 $ZYNTHIAN_RECIPE_DIR/install_hylia.sh
 $ZYNTHIAN_RECIPE_DIR/install_pd_extra_abl_link.sh
-$ZYNTHIAN_RECIPE_DIR/install_distrho_ports.sh
+#$ZYNTHIAN_RECIPE_DIR/install_distrho_ports.sh
 )
 
 for recipe in "${recipes[@]}"
